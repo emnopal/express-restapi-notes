@@ -11,7 +11,7 @@ const failResponse = (
         success: false,
         status: status,
         message: message,
-        data: data ?? ""
+        data: data
     });
 };
 

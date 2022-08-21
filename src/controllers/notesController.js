@@ -3,14 +3,10 @@ import notesFailHandler from '../helpers/notesFailHandler.js';
 import notesSuccessHandler from '../helpers/notesSuccessHandler.js';
 
 export const addNoteHandler = async (request, response) => {
-    const { title, tags, body } = request.body;
+    const { body } = request;
 
     try {
-        const notes = new notesModel({
-            title: title,
-            tags: tags,
-            body: body,
-        });
+        const notes = new notesModel(body);
         const result = await notes.save();
         return notesSuccessHandler({
             response: response,
@@ -31,49 +27,29 @@ export const addNoteHandler = async (request, response) => {
     }
 };
 
-export const getAllNotesHandler = async (request, response) => {
+export const getNotesHandler = async (request, response) => {
+    const { id } = request.params;
+
     try {
-        const notes = await notesModel.find().exec();
+        const notesWithID = id ? notesModel.findById(id).exec() : notesModel.find().exec();
+        const notes = await notesWithID;
+        const parseMsgSuccess = id ? `Success getting note ${id}` : 'Success get all notes';
         return notesSuccessHandler({
             response: response,
             data: {
                 notes: notes,
             },
-            message: 'Success get all notes',
+            message: parseMsgSuccess,
         });
     } catch (error) {
+        const parseMsgFail = id ? `Fail getting note ${id}` : 'Fail get all notes';
         console.log(error);
         return notesFailHandler({
             response: response,
             data: {
                 error: error,
             },
-            message: 'Fail get all notes',
-        });
-    }
-};
-
-export const getNoteHandler = async (request, response) => {
-    const { id } = request.params;
-
-    try {
-        const note = await notesModel.findById(id).exec();
-        return notesSuccessHandler({
-            response: response,
-            data: {
-                note: note,
-            },
-            message: `Success getting note ${id}`,
-        });
-    } catch (error) {
-        console.log(error);
-        return notesFailHandler({
-            h: h,
-            data: {
-                error: error,
-            },
-            statusCode: 404,
-            message: `Failed to getting note ${id}, note ${id} not found`,
+            message: parseMsgFail,
         });
     }
 };

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import express from "express";
 import { config } from "./configs/server.js";
-import { host, port } from "./configs/environment.js";
+import { port } from "./configs/environment.js";
 import { mongodb_connection } from "./configs/database.js";
 import router from "./routes/notesRoute.js";
 

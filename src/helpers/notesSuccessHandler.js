@@ -11,7 +11,7 @@ const successResponse = (
         success: true,
         status: status,
         message: message,
-        data: data ?? ""
+        data: data
     });
 };
 

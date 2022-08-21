@@ -2,16 +2,14 @@ import express from "express";
 
 import {
     addNoteHandler,
-    getAllNotesHandler,
-    getNoteHandler,
+    getNotesHandler,
     editNoteHandler,
     deleteNoteHandler,
 } from '../controllers/notesController.js';
 
 const router = express.Router();
 
-router.get('/notes', getAllNotesHandler);
-router.get('/notes/:id', getNoteHandler);
+router.get('/notes/:id?', getNotesHandler);
 router.post('/notes', addNoteHandler);
 router.put('/notes/:id', editNoteHandler);
 router.delete('/notes/:id', deleteNoteHandler);
