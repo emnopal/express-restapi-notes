@@ -1,14 +1,15 @@
-import notesModel from '../models/notesModel.js';
-import notesFailHandler from '../helpers/notesFailHandler.js';
-import notesSuccessHandler from '../helpers/notesSuccessHandler.js';
+import NotesModel from '../models/notesModel.js';
+import failHandler from '../helpers/failHandler.js';
+import successHandler from '../helpers/successHandler.js';
 
 export const addNoteHandler = async (request, response) => {
-    const { body } = request;
+    const {body} = request;
 
     try {
-        const notes = new notesModel(body);
+        const notes = new NotesModel(body);
         const result = await notes.save();
-        return notesSuccessHandler({
+
+        return successHandler({
             response: response,
             data: {
                 success: result,
@@ -17,7 +18,7 @@ export const addNoteHandler = async (request, response) => {
         });
     } catch (error) {
         console.log(error);
-        return notesFailHandler({
+        return failHandler({
             response: response,
             data: {
                 error: error,
@@ -28,13 +29,21 @@ export const addNoteHandler = async (request, response) => {
 };
 
 export const getNotesHandler = async (request, response) => {
-    const { id } = request.params;
+    const {id} = request.params;
 
     try {
-        const notesWithID = id ? notesModel.findById(id).exec() : notesModel.find().exec();
-        const notes = await notesWithID;
-        const parseMsgSuccess = id ? `Success getting note ${id}` : 'Success get all notes';
-        return notesSuccessHandler({
+        let notes;
+
+        if (id) {
+            notes = await NotesModel.findById(id).exec();
+        } else {
+            notes = await NotesModel.find().exec();
+        }
+
+        const parseMsgSuccess =
+            id ? `Success getting note ${id}` : 'Success get all notes';
+
+        return successHandler({
             response: response,
             data: {
                 notes: notes,
@@ -42,9 +51,10 @@ export const getNotesHandler = async (request, response) => {
             message: parseMsgSuccess,
         });
     } catch (error) {
-        const parseMsgFail = id ? `Fail getting note ${id}` : 'Fail get all notes';
-        console.log(error);
-        return notesFailHandler({
+        const parseMsgFail =
+            id ? `Fail getting note ${id}` : 'Fail get all notes';
+
+        return failHandler({
             response: response,
             data: {
                 error: error,
@@ -55,23 +65,26 @@ export const getNotesHandler = async (request, response) => {
 };
 
 export const editNoteHandler = async (request, response) => {
-    const { id } = request.params;
-    const { title, tags, body } = request.body;
+    const {id} = request.params;
+    const {body} = request;
     const updatedAt = new Date().toISOString();
 
     const updatedData = {
-        title: title,
-        tags: tags,
-        body: body,
+        title: body.title,
+        tags: body.tags,
+        body: body.body,
         updatedAt: updatedAt,
     };
+
     const isNew = {
-        new: true
+        new: true,
     };
 
     try {
-        const result = await notesModel.findByIdAndUpdate(id, updatedData, isNew).exec();
-        return notesSuccessHandler({
+        const result = await NotesModel.findByIdAndUpdate(
+            id, updatedData, isNew).exec();
+
+        return successHandler({
             response: response,
             data: {
                 result: result,
@@ -79,7 +92,7 @@ export const editNoteHandler = async (request, response) => {
             message: `Success change note ${id}`,
         });
     } catch (error) {
-        return notesFailHandler({
+        return failHandler({
             response: response,
             data: {
                 error: error,
@@ -91,11 +104,11 @@ export const editNoteHandler = async (request, response) => {
 };
 
 export const deleteNoteHandler = async (request, response) => {
-    const { id } = request.params;
+    const {id} = request.params;
 
     try {
-        const result = await notesModel.findByIdAndDelete(id).exec();
-        return notesSuccessHandler({
+        const result = await NotesModel.findByIdAndDelete(id).exec();
+        return successHandler({
             response: response,
             data: {
                 result: result,
@@ -103,7 +116,7 @@ export const deleteNoteHandler = async (request, response) => {
             message: `Success deleting note ${id}`,
         });
     } catch (error) {
-        return notesFailHandler({
+        return failHandler({
             response: response,
             data: {
                 error: error,
