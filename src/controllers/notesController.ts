@@ -1,12 +1,15 @@
-import NotesModel from '../models/notesModel.js';
-import failHandler from '../helpers/failHandler.js';
-import successHandler from '../helpers/successHandler.js';
+import Notes from '../models/notes';
+import failHandler from '../helpers/failHandler';
+import successHandler from '../helpers/successHandler';
+import {Request, Response} from 'express';
 
-export const addNoteHandler = async (request, response) => {
+export const addNoteHandler: any = async (
+    request: Request, response: Response,
+) => {
     const {body} = request;
 
     try {
-        const notes = new NotesModel(body);
+        const notes = new Notes(body);
         const result = await notes.save();
 
         return successHandler({
@@ -28,19 +31,21 @@ export const addNoteHandler = async (request, response) => {
     }
 };
 
-export const getNotesHandler = async (request, response) => {
+export const getNotesHandler: any = async (
+    request: Request, response: Response,
+) => {
     const {id} = request.params;
 
     try {
-        let notes;
+        let notes: any;
 
         if (id) {
-            notes = await NotesModel.findById(id).exec();
+            notes = await Notes.findById(id).exec();
         } else {
-            notes = await NotesModel.find().exec();
+            notes = await Notes.find().exec();
         }
 
-        const parseMsgSuccess =
+        const parseMsgSuccess: string =
             id ? `Success getting note ${id}` : 'Success get all notes';
 
         return successHandler({
@@ -51,7 +56,7 @@ export const getNotesHandler = async (request, response) => {
             message: parseMsgSuccess,
         });
     } catch (error) {
-        const parseMsgFail =
+        const parseMsgFail: string =
             id ? `Fail getting note ${id}` : 'Fail get all notes';
 
         return failHandler({
@@ -64,7 +69,9 @@ export const getNotesHandler = async (request, response) => {
     }
 };
 
-export const editNoteHandler = async (request, response) => {
+export const editNoteHandler: any = async (
+    request: Request, response: Response,
+) => {
     const {id} = request.params;
     const {body} = request;
     const updatedAt = new Date().toISOString();
@@ -81,7 +88,7 @@ export const editNoteHandler = async (request, response) => {
     };
 
     try {
-        const result = await NotesModel.findByIdAndUpdate(
+        const result = await Notes.findByIdAndUpdate(
             id, updatedData, isNew).exec();
 
         return successHandler({
@@ -103,11 +110,13 @@ export const editNoteHandler = async (request, response) => {
     }
 };
 
-export const deleteNoteHandler = async (request, response) => {
+export const deleteNoteHandler: any = async (
+    request: Request, response: Response,
+) => {
     const {id} = request.params;
 
     try {
-        const result = await NotesModel.findByIdAndDelete(id).exec();
+        const result = await Notes.findByIdAndDelete(id).exec();
         return successHandler({
             response: response,
             data: {

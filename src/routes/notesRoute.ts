@@ -5,9 +5,9 @@ import {
     getNotesHandler,
     editNoteHandler,
     deleteNoteHandler,
-} from '../controllers/notesController.js';
+} from '../controllers/notesController';
 
-const router = express.Router();
+const router: express.Router = express.Router();
 
 router.get('/notes/:id?', getNotesHandler);
 router.post('/notes', addNoteHandler);
