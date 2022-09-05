@@ -23,6 +23,7 @@
         "sourceType": "module"
     },
     "rules": {
+		"linebreak-style": 0,
         "indent": [
             "error",
             4
@@ -30,7 +31,6 @@
         "new-cap": 0,
         "@typescript-eslint/no-explicit-any": "off",
         "no-unused-vars": "off",
-        /*Added this into eslintrc to avoid error in ts-node-dev*/
         "import/extensions": [
             "error",
             "ignorePackages",

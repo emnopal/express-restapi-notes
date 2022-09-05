@@ -37,4 +37,3 @@ export const config: any = (app: Express, routes: Router) => {
 
     return app;
 };
-
