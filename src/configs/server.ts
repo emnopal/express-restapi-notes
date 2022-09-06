@@ -10,22 +10,22 @@ import createError from 'http-errors';
 import helmet from 'helmet';
 
 export const config: any = (app: Express, routes: Router) => {
-    app.use(cors()); // enable all cors
-    app.use(helmet()); // helmet for securing api
+    app.use(cors());
+    app.use(helmet());
 
-    app.use(json()); // initialize that is json request
-    app.use(urlencoded({extended: true})); // encoding the url
-    app.use('/api/', routes); // prefix of api
+    app.use(json());
+    app.use(urlencoded({
+        extended: true,
+    }));
+    app.use('/api/', routes);
 
     nodeEnv !== 'production' ?
         app.use(logger('dev')) : app.use(logger('combined'));
 
-    // 404 error if there is no valid url
     app.use((req: Request, res: Response, next: NextFunction) => {
         next(createError(404));
     });
 
-    // handling error
     app.use((err: any, req: Request, res: Response) => {
         res.locals.message = err.message;
         res.locals.error = req.app.get('env') === 'development' ? err : {};

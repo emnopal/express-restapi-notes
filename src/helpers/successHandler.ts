@@ -1,5 +1,7 @@
+import {Response} from 'express';
+
 interface ISuccessResponse {
-    response: any;
+    res: Response;
     data: any;
     status: string;
     message: string;
@@ -8,14 +10,14 @@ interface ISuccessResponse {
 
 const successResponse: any = (
     {
-        response,
+        res,
         data,
         status = 'success',
         message = 'Success',
         statusCode = 200,
     }: ISuccessResponse,
 ) => {
-    return response.status(statusCode).json({
+    return res.status(statusCode).json({
         success: true,
         status: status,
         message: message,
