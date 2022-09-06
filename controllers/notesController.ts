@@ -71,10 +71,14 @@ export const editNoteHandler: any = async (
     const {body} = req;
     const updatedAt = new Date().toISOString();
 
+    // safe handling if isArchived is null or undefined
+    const archived = body.isArchived ? true : false;
+
     const updatedData = {
         title: body.title,
         tags: body.tags,
         body: body.body,
+        isArchived: archived,
         updatedAt: updatedAt,
     };
 

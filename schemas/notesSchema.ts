@@ -21,6 +21,10 @@ const notesSchema: mongoose.Schema = new mongoose.Schema({
         type: Date,
         default: new Date().toISOString(),
     },
+    isArchived: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 export default notesSchema;
